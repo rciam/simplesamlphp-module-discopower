@@ -4,7 +4,8 @@ jQuery.fn.liveUpdate = function (list) {
     if (list.length) {
         var rows = list.children('a'),
         cache = rows.map(function () {
-            return jQuery(this).text().toLowerCase();
+            rowText = jQuery(this).text().toLowerCase();
+            return rowText.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
         });
 
         this.keyup(filter).keyup().parents('form').submit(function () {
@@ -16,7 +17,8 @@ jQuery.fn.liveUpdate = function (list) {
 
     function filter()
     {
-        var term = jQuery.trim(jQuery(this).val().toLowerCase()), scores = [];
+        value = jQuery(this).val().toLowerCase();
+        var term = jQuery.trim(value.normalize("NFD").replace(/[\u0300-\u036f]/g, "")), scores = [];
 
         if (!term) {
             rows.show();
